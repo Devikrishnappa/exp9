@@ -1,0 +1,35 @@
+import java.time.Duration;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class App {
+    public static void main(String[] args) throws Exception {
+        System.setProperty("webdriver.chrome.driver",
+                "C:\\Users\\Rajanipandi S\\Desktop\\TESTING\\project\\exp9\\src\\driver\\chromedriver.exe");
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://www.flipkart.com/");
+        driver.manage().window().maximize();
+        WebElement search = driver.findElement(By.xpath("//input[@name='q']"));
+        search.sendKeys("soft toys");
+        search.submit();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement item = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//*[@id=\"container\"]/div/div[3]/div[1]/div[2]/div[2]/div/div[3]/div")));
+        item.click();
+        // Switching to the new window
+        for (String handle : driver.getWindowHandles()) {
+            driver.switchTo().window(handle);
+        }
+        // Now driver points to the second window
+        WebElement addToCart = driver
+
+                .findElement(By.xpath("//*[@id=\"container\"]/div/div[3]/div[1]/div[1]/div[2]/div/ul/li[1]/button"));
+        addToCart.click();
+        Thread.sleep(10000);
+        driver.quit();
+    }
+}
